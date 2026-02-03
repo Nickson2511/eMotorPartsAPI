@@ -1,0 +1,347 @@
+############################
+# ENV FILES
+############################
+.env
+.env.local
+.env.dev
+.env.test
+.env.prod
+.env.production
+.env.staging
+.env.example.backup
+.env.backup
+.env.*
+
+############################
+# NODE MODULES
+############################
+node_modules/
+jspm_packages/
+pnpm-lock.yaml
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.pnpm-store
+
+############################
+# LOG FILES
+############################
+logs/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+############################
+# TYPESCRIPT
+############################
+dist/
+build/
+lib/
+out/
+tmp/
+*.tsbuildinfo
+
+############################
+# TS-NODE
+############################
+.ts-node/
+.ts-node-dev/
+
+############################
+# COVERAGE
+############################
+coverage/
+.nyc_output/
+.lcov
+
+############################
+# CACHE
+############################
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.prettiercache
+
+############################
+# TESTING
+############################
+__tests__/output
+test-results/
+playwright-report/
+cypress/screenshots
+cypress/videos
+
+############################
+# DATABASE
+############################
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+mongo-data/
+mongodb-data/
+data/
+backups/
+
+############################
+# UPLOADS
+############################
+uploads/
+public/uploads/
+tmp/uploads/
+multer-temp/
+storage/
+
+############################
+# CLOUDINARY
+############################
+cloudinary-cache/
+cloudinary-temp/
+
+############################
+# DOCKER
+############################
+.dockerignore
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose.dev.yml
+docker-compose.prod.yml
+.docker/
+docker-data/
+docker-volumes/
+
+############################
+# BUILD OUTPUT
+############################
+*.out
+*.map
+*.min.js
+*.bundle.js
+
+############################
+# OS FILES
+############################
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+############################
+# LINUX
+############################
+*~
+.nfs*
+
+############################
+# WINDOWS
+############################
+$RECYCLE.BIN/
+*.lnk
+
+############################
+# MAC
+############################
+.AppleDouble
+.LSOverride
+
+############################
+# IDEs
+############################
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+*.old
+*.save
+
+############################
+# DEBUG
+############################
+debug.log
+debug/
+npm-debug.log*
+yarn-debug.log*
+
+############################
+# SECURITY
+############################
+*.pem
+*.key
+*.crt
+*.csr
+*.pfx
+*.p12
+secrets/
+keys/
+certs/
+
+############################
+# API TOKENS
+############################
+.token
+.tokens
+auth.json
+credentials.json
+
+############################
+# CI/CD
+############################
+.github/workflows/*.env
+.gitlab-ci.yml.backup
+.circleci/config.yml.backup
+
+############################
+# FRONTEND (if added later)
+############################
+client/node_modules/
+client/dist/
+client/build/
+client/.env
+
+############################
+# MONOREPO
+############################
+packages/*/node_modules
+packages/*/dist
+apps/*/node_modules
+apps/*/dist
+
+############################
+# TEMP FILES
+############################
+temp/
+tmp/
+.cache/
+.session/
+.sessions/
+
+############################
+# SERVER RUNTIME
+############################
+runtime/
+process.pid
+
+############################
+# MONGO
+############################
+*.bson
+*.ns
+dump/
+mongod.lock
+
+############################
+# BACKUP FILES
+############################
+*.backup
+*.bak
+*.old
+*.orig
+
+############################
+# REPORTS
+############################
+reports/
+report.json
+report.xml
+
+############################
+# LINT
+############################
+.eslintcache
+.stylelintcache
+
+############################
+# FORMATTERS
+############################
+.prettiercache
+
+############################
+# ENV BACKUPS
+############################
+.env~
+.env.save
+.env.old
+
+############################
+# SSH
+############################
+.ssh/
+known_hosts
+
+############################
+# NODE REPL
+############################
+.node_repl_history
+
+############################
+# SWAGGER
+############################
+swagger-output.json
+swagger.json
+
+############################
+# API DOCS
+############################
+docs/build/
+docs/dist/
+
+############################
+# PM2
+############################
+ecosystem.config.js.backup
+pids/
+logs/pm2/
+
+############################
+# NGINX
+############################
+nginx/logs/
+nginx/cache/
+
+############################
+# SUPERVISOR
+############################
+supervisor.log
+
+############################
+# SENTRY
+############################
+.sentryclirc
+
+############################
+# FUTURE FRAMEWORKS
+############################
+.next/
+.nuxt/
+.svelte-kit/
+.angular/
+
+############################
+# REACT NATIVE (JUST IN CASE)
+############################
+android/build/
+ios/build/
+
+############################
+# MISC
+############################
+*.stackdump
+*.tgz
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+*.iso
+*.img
+
+############################
+# END
+############################
