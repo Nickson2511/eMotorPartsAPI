@@ -1,11 +1,13 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+
 import authRoutes from "./modules/auth/auth.routes";
 import adminInviteRoute from "./modules/admin-invite/adminInvite.routes";
 import productRoutes from "./modules/product/product.routes";
+import cartRoutes from "./modules/cart/cart.routes";
+import orderRoutes from "./modules/order/order.routes";
 
-dotenv.config();
+
 
 const app = express();
 
@@ -15,5 +17,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin-invites", adminInviteRoute);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 export default app;

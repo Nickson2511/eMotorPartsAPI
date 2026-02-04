@@ -43,7 +43,7 @@ const productSchema = new Schema<IProduct>(
         rating: { type: Number, default: 0 },
         numReviews: { type: Number, default: 0 },
 
-        sku: { type: String, unique: true },
+        sku: { type: String, unique: true, required: true },
 
         createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     },
