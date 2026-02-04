@@ -6,6 +6,8 @@ import adminInviteRoute from "./modules/admin-invite/adminInvite.routes";
 import productRoutes from "./modules/product/product.routes";
 import cartRoutes from "./modules/cart/cart.routes";
 import orderRoutes from "./modules/order/order.routes";
+import checkOutRoutes from "./modules/checkout/payment.routes";
+import reviewRoutes from "./modules/review/review.routes";
 
 
 
@@ -19,5 +21,7 @@ app.use("/api/admin-invites", adminInviteRoute);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/checkout", checkOutRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 export default app;
