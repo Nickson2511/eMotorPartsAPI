@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { registerUser, loginUser, logoutUser } from "./auth.service";
+import { googleLogin } from "./auth.service";
 import { ApiResponse } from "../../utils/ApiResponse";
 
 export const register = async (req: Request, res: Response) => {
@@ -28,6 +29,31 @@ export const login = async (req: Request, res: Response) => {
             refreshToken,
         })
     );
+};
+
+export const googleAuth = async (req: Request, res: Response) => {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+        return res.status(400).json({ message: "idToken is required" });
+    }
+
+    const { user, accessToken, refreshToken } = await googleLogin(idToken);
+
+    res.json({
+        success: true,
+        message: "Google login successful",
+        data: {
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
+            accessToken,
+            refreshToken,
+        },
+    });
 };
 
 export const logout = async (req: any, res: Response) => {

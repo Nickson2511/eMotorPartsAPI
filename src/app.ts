@@ -8,6 +8,7 @@ import cartRoutes from "./modules/cart/cart.routes";
 import orderRoutes from "./modules/order/order.routes";
 import checkOutRoutes from "./modules/checkout/payment.routes";
 import reviewRoutes from "./modules/review/review.routes";
+import wishListRoutes from "./modules/wishlist/wishlist.routes";
 
 
 
@@ -23,5 +24,6 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/checkout", checkOutRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/wishlists", wishListRoutes);
 
 export default app;
