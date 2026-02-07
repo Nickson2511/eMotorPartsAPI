@@ -8,21 +8,34 @@ import { ApiError } from "../../utils/ApiError";
 export const createProduct = async (req: any, res: any) => {
     try {
         const imageUrls: string[] = [];
-
         const files = req.files as Express.Multer.File[];
+
         if (!files || files.length === 0) {
             return res.status(400).json({ message: "No images uploaded" });
         }
 
-        
         for (const file of files) {
             const result = await cloudinary.uploader.upload(file.path);
             imageUrls.push(result.secure_url);
         }
-        
+
+        const {
+            price,
+            oldPrice,
+            ...rest
+        } = req.body;
+
+        // extra guard (optional but good)
+        if (oldPrice && Number(oldPrice) <= Number(price)) {
+            return res.status(400).json({
+                message: "Old price must be greater than price",
+            });
+        }
 
         const product = await Product.create({
-            ...req.body,
+            ...rest,
+            price: Number(price),
+            oldPrice: oldPrice ? Number(oldPrice) : undefined,
             images: imageUrls,
             createdBy: req.user.id,
         });
@@ -76,15 +89,22 @@ export const getProducts = async (req: any, res: any) => {
         query = query.sort(sortMap[sortBy]);
     }
 
-    const products = await query;
+    //const products = await query;
+    const products = await query.populate("category", "name").populate("subCategory", "name");
     res.json(products);
 };
+
+
+
 
 /**
  * CUSTOMER: Get product by ID
  */
 export const getProductById = async (req: any, res: any) => {
-    const product = await Product.findById(req.params.id);
+    //const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id)
+        .populate("category", "name")
+        .populate("subCategory", "name");
 
     if (!product || !product.isActive) {
         throw new ApiError(404, "Product not found");
@@ -96,17 +116,72 @@ export const getProductById = async (req: any, res: any) => {
 /**
  * ADMIN: Update product
  */
+
+/**
+ * ADMIN: Update product (PATCH)
+ */
+
 export const updateProduct = async (req: any, res: any) => {
-    const product = await Product.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true }
-    );
+    try {
+        const productId = req.params.id;
+        const files = req.files as Express.Multer.File[];
+        const updates: any = { ...req.body }; // Only fields sent
 
-    if (!product) throw new ApiError(404, "Product not found");
+        // Remove category/subCategory from updates to prevent BSON errors
+        delete updates.category;
+        delete updates.subCategory;
 
-    res.json(product);
+        // Convert numeric fields safely
+        if (updates.price !== undefined) updates.price = Number(updates.price);
+        if (updates.oldPrice !== undefined) updates.oldPrice = Number(updates.oldPrice);
+        if (updates.stock !== undefined) updates.stock = Number(updates.stock);
+
+        // Validate oldPrice > price
+        if (
+            updates.price !== undefined &&
+            updates.oldPrice !== undefined &&
+            updates.oldPrice <= updates.price
+        ) {
+            return res.status(400).json({
+                message: "Old price must be greater than price",
+            });
+        }
+
+        // Handle images if any
+        if (files && files.length > 0) {
+            const imageUrls: string[] = [];
+            for (const file of files) {
+                const result = await cloudinary.uploader.upload(file.path);
+                imageUrls.push(result.secure_url);
+            }
+            updates.images = imageUrls;
+        }
+
+        // Update product (category/subCategory untouched)
+        const updatedProduct = await Product.findByIdAndUpdate(
+            productId,
+            { $set: updates },
+            { new: true, runValidators: true }
+        )
+        .populate("category", "name") // still populate for frontend
+        .populate("subCategory", "name");
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.json(updatedProduct);
+    } catch (error: any) {
+        console.error("UPDATE PRODUCT ERROR:", error);
+        res.status(500).json({
+            message: "Failed to update product",
+            error: error.message || error,
+        });
+    }
 };
+
+
+
 
 /**
  * ADMIN: Delete product
