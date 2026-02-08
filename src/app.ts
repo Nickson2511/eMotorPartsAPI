@@ -18,7 +18,8 @@ const app = express();
 // ---------- CORS CONFIGURATION ----------
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://emoto-frontend.vercel.app"
+    "https://emoto-frontend.vercel.app",
+    "https://emotorpartsapi.onrender.com/"
 ];
 
 app.use(cors({
