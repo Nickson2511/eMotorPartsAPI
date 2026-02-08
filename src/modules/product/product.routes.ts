@@ -14,14 +14,14 @@ import { upload } from "../../middlewares/upload.middleware";
 const router = Router();
 
 /* CUSTOMER */
-router.get("/", getProducts);               // search/filter/sort
-router.get("/:id", getProductById);         // product detail
+router.get("/", getProducts);
+router.get("/:id", getProductById);
 
 /* ADMIN */
 router.post(
     "/manage",
     protect,
-    authorize("admin"),
+    authorize("admin", "superadmin"),
     upload.array("images", 5),
     createProduct
 );
@@ -29,14 +29,14 @@ router.post(
 router.get(
     "/admin/all",
     protect,
-    authorize("admin"),
+    authorize("admin", "superadmin"),
     getAllProductsAdmin
 );
 
 router.patch(
     "/:id",
     protect,
-    authorize("admin"),
+    authorize("admin", "superadmin"),
     upload.array("images", 5),
     updateProduct
 );
@@ -44,7 +44,7 @@ router.patch(
 router.delete(
     "/:id",
     protect,
-    authorize("admin"),
+    authorize("admin", "superadmin"),
     deleteProduct
 );
 

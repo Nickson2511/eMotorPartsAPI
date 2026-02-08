@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import authRoutes from "./modules/auth/auth.routes";
+import userRoutes from "./modules/user/user.routes";
 import adminInviteRoute from "./modules/admin-invite/adminInvite.routes";
 import productRoutes from "./modules/product/product.routes";
 import cartRoutes from "./modules/cart/cart.routes";
@@ -16,7 +17,7 @@ const app = express();
 
 // ---------- CORS CONFIGURATION ----------
 const allowedOrigins = [
-    "http://localhost:5173", 
+    "http://localhost:5173",
     "https://emoto-frontend.vercel.app"
 ];
 
@@ -38,6 +39,7 @@ app.use(express.json());
 
 // ---------- ROUTES ----------
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/admin-invites", adminInviteRoute);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);

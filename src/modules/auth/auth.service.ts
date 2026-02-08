@@ -14,7 +14,7 @@ const generateAccessToken = (user: any) => {
     return jwt.sign(
         { id: user._id, role: user.role },
         process.env.JWT_SECRET!,
-        { expiresIn: "15m" }
+        { expiresIn: "24h" }
     );
 };
 
@@ -79,11 +79,11 @@ export const googleLogin = async (idToken: string) => {
         });
     }
 
-    // Generate tokens (reuse your logic)
+    // Generate tokens 
     const accessToken = jwt.sign(
         { id: user._id, role: user.role },
         process.env.JWT_SECRET!,
-        { expiresIn: "15m" }
+        { expiresIn: "24h" }
     );
 
     const refreshToken = jwt.sign(
