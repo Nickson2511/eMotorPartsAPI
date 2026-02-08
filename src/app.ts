@@ -16,8 +16,8 @@ const app = express();
 
 // ---------- CORS CONFIGURATION ----------
 const allowedOrigins = [
-    "http://localhost:5173", // local dev
-    "https://emoto-frontend.vercel.app" // hosted frontend
+    "http://localhost:5173", 
+    "https://emoto-frontend.vercel.app"
 ];
 
 app.use(cors({

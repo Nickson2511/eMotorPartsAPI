@@ -3,21 +3,29 @@ import Product from "../product/product.model";
 import { ApiError } from "../../utils/ApiError";
 
 /**
- * Add to cart (guest or user)
+ * Helper: always return populated cart
+ */
+const populateCart = async (cart: any) => {
+    await cart.populate("items.product");
+    return cart;
+};
+
+/**
+ * Add to cart
  */
 export const addToCart = async (req: any, res: any) => {
     const { productId, quantity, cartId } = req.body;
 
     if (!cartId) throw new ApiError(400, "cartId is required");
+    if (!productId || quantity < 1)
+        throw new ApiError(400, "Invalid payload");
 
     const product = await Product.findById(productId);
-    if (!product || !product.isActive) {
+    if (!product || !product.isActive)
         throw new ApiError(404, "Product not found");
-    }
 
-    if (product.stock < quantity) {
+    if (product.stock < quantity)
         throw new ApiError(400, "Not enough stock");
-    }
 
     let cart = await Cart.findOne({ cartId });
 
@@ -27,27 +35,31 @@ export const addToCart = async (req: any, res: any) => {
             items: [{
                 product: product._id,
                 quantity,
-                price: product.discountPrice || product.price,
+                price: product.price,
             }]
         });
     } else {
-        const itemIndex = cart.items.findIndex(
-            (item) => item.product.toString() === productId
+        const item = cart.items.find(
+            (i) => i.product.toString() === productId
         );
 
-        if (itemIndex > -1) {
-            cart.items[itemIndex].quantity += quantity;
+        if (item) {
+            if (item.quantity + quantity > product.stock)
+                throw new ApiError(400, "Stock exceeded");
+
+            item.quantity += quantity;
         } else {
             cart.items.push({
                 product: product._id,
                 quantity,
-                price: product.discountPrice || product.price,
+                price: product.price,
             });
         }
 
         await cart.save();
     }
 
+    await populateCart(cart);
     res.json(cart);
 };
 
@@ -56,12 +68,17 @@ export const addToCart = async (req: any, res: any) => {
  */
 export const getCart = async (req: any, res: any) => {
     const { cartId } = req.query;
-
     if (!cartId) throw new ApiError(400, "cartId is required");
 
     const cart = await Cart.findOne({ cartId }).populate("items.product");
 
-    if (!cart) return res.json({ items: [] });
+    if (!cart) {
+        return res.json({
+            cartId,
+            items: [],
+            totalAmount: 0,
+        });
+    }
 
     res.json(cart);
 };
@@ -72,17 +89,34 @@ export const getCart = async (req: any, res: any) => {
 export const updateCartItem = async (req: any, res: any) => {
     const { cartId, productId, quantity } = req.body;
 
+    if (!cartId || !productId)
+        throw new ApiError(400, "Invalid payload");
+
     const cart = await Cart.findOne({ cartId });
     if (!cart) throw new ApiError(404, "Cart not found");
 
     const item = cart.items.find(
-        (item) => item.product.toString() === productId
+        (i) => i.product.toString() === productId
     );
 
-    if (!item) throw new ApiError(404, "Item not in cart");
+    if (!item) throw new ApiError(404, "Item not found");
 
-    item.quantity = quantity;
+    if (quantity <= 0) {
+        cart.items = cart.items.filter(
+            (i) => i.product.toString() !== productId
+        );
+    } else {
+        const product = await Product.findById(productId);
+        if (!product) throw new ApiError(404, "Product not found");
+
+        if (quantity > product.stock)
+            throw new ApiError(400, "Stock exceeded");
+
+        item.quantity = quantity;
+    }
+
     await cart.save();
+    await populateCart(cart);
 
     res.json(cart);
 };
@@ -93,6 +127,9 @@ export const updateCartItem = async (req: any, res: any) => {
 export const removeFromCart = async (req: any, res: any) => {
     const { cartId, productId } = req.body;
 
+    if (!cartId || !productId)
+        throw new ApiError(400, "Invalid payload");
+
     const cart = await Cart.findOne({ cartId });
     if (!cart) throw new ApiError(404, "Cart not found");
 
@@ -101,6 +138,7 @@ export const removeFromCart = async (req: any, res: any) => {
     );
 
     await cart.save();
+    await populateCart(cart);
 
     res.json(cart);
 };
@@ -110,8 +148,13 @@ export const removeFromCart = async (req: any, res: any) => {
  */
 export const clearCart = async (req: any, res: any) => {
     const { cartId } = req.body;
+    if (!cartId) throw new ApiError(400, "cartId required");
 
     await Cart.findOneAndDelete({ cartId });
 
-    res.json({ message: "Cart cleared" });
+    res.json({
+        cartId,
+        items: [],
+        totalAmount: 0,
+    });
 };

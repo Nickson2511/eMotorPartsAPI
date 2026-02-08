@@ -157,14 +157,14 @@ export const updateProduct = async (req: any, res: any) => {
             updates.images = imageUrls;
         }
 
-        // Update product (category/subCategory untouched)
+        
         const updatedProduct = await Product.findByIdAndUpdate(
             productId,
             { $set: updates },
             { new: true, runValidators: true }
         )
-        .populate("category", "name") // still populate for frontend
-        .populate("subCategory", "name");
+            .populate("category", "name")
+            .populate("subCategory", "name");
 
         if (!updatedProduct) {
             return res.status(404).json({ message: "Product not found" });
