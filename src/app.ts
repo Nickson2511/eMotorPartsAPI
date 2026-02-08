@@ -37,6 +37,16 @@ app.use(cors({
 // ---------- JSON PARSER ----------
 app.use(express.json());
 
+
+// ---------- HEALTH CHECK ----------
+app.get("/health", (_req, res) => {
+    res.status(200).json({
+        status: "ok",
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+    });
+});
+
 // ---------- ROUTES ----------
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
