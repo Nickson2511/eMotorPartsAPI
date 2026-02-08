@@ -7,13 +7,13 @@ export interface IOrderItem {
 }
 
 export interface IOrder extends Document {
-    user?: mongoose.Types.ObjectId;  // optional for guest checkout
-    cartId?: string;                 // guest cart reference
+    user?: mongoose.Types.ObjectId;
+    cartId?: string;
     items: IOrderItem[];
     totalAmount: number;
     status: "pending" | "paid" | "shipped" | "delivered" | "cancelled";
     shippingAddress: string;
-    paymentMethod: "cash" | "card" | "mobile";
+    paymentMethod: "cash" | "card" | "mpesa";
 }
 
 const orderItemSchema = new Schema<IOrderItem>({
@@ -24,7 +24,7 @@ const orderItemSchema = new Schema<IOrderItem>({
 
 const orderSchema = new Schema<IOrder>({
     user: { type: Schema.Types.ObjectId, ref: "User" },
-    cartId: { type: String },  // guest cart reference
+    cartId: { type: String },
     items: [orderItemSchema],
     totalAmount: { type: Number, required: true },
     status: {
@@ -35,7 +35,7 @@ const orderSchema = new Schema<IOrder>({
     shippingAddress: { type: String, required: true },
     paymentMethod: {
         type: String,
-        enum: ["cash", "card", "mobile"],
+        enum: ["cash", "card", "mpesa"],
         required: true
     },
 }, { timestamps: true });
