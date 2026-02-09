@@ -22,6 +22,6 @@ router.put("/:id", protect, authorize("admin", "superadmin"), updateUser);
 router.delete("/:id", protect, authorize("admin", "superadmin"), deleteUser);
 
 // Create new admin (superadmin only)
-router.post("/create-admin", protect, authorize("superadmin"), createAdmin);
+router.post("/create-admin", protect, authorize("admin", "superadmin"), createAdmin);
 
 export default router;
