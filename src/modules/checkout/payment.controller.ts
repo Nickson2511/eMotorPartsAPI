@@ -50,8 +50,8 @@ export const payWithMpesa = async (req: any, res: any) => {
         if (!phoneNumber) throw new ApiError(400, "Phone number is required");
         if (!req.user) {
             throw new ApiError(401, "Login required to make payment");
-            }
-            
+        }
+
 
         const normalizedPhone = normalizeKenyanPhone(phoneNumber);
 
@@ -60,8 +60,8 @@ export const payWithMpesa = async (req: any, res: any) => {
         if (!order) throw new ApiError(404, "Order not found");
         if (order.user?.toString() !== req.user.id) {
             throw new ApiError(403, "You are not allowed to pay for this order");
-            }
-            
+        }
+
         if (order.status === "paid") {
             throw new ApiError(404, "Order already paid");
         }
@@ -84,7 +84,8 @@ export const payWithMpesa = async (req: any, res: any) => {
                 PartyA: normalizedPhone,
                 PartyB: MPESA_SHORTCODE,
                 PhoneNumber: normalizedPhone,
-                CallBackURL: `${process.env.APP_URL_Saf}/api/payments/callback`,
+                CallBackURL: `${process.env.APP_URL_Saf}/api/checkout/callback`,
+                //CallBackURL: `${process.env.APP_URL_Saf}/api/payments/callback`,
                 AccountReference: orderId,
                 TransactionDesc: "Payment for order",
             },
@@ -98,6 +99,7 @@ export const payWithMpesa = async (req: any, res: any) => {
             amount,
             paymentMethod: "mpesa",
             status: "pending",
+            transactionId: stkResponse.data.CheckoutRequestID
         });
 
         res.json({ message: "STK Push initiated", response: stkResponse.data, paymentId: payment._id });
