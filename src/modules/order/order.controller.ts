@@ -3,12 +3,11 @@ import Cart from "../cart/cart.model";
 import Product from "../product/product.model";
 import { ApiError } from "../../utils/ApiError";
 
-/**
- * CREATE ORDER (guest or logged-in user)
- */
+
 export const createOrder = async (req: any, res: any) => {
     try {
         const { cartId, shippingAddress, paymentMethod } = req.body;
+
         if (!cartId) throw new ApiError(400, "cartId is required");
 
         // Find the cart

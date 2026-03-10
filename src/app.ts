@@ -6,12 +6,14 @@ import userRoutes from "./modules/user/user.routes";
 import adminInviteRoute from "./modules/admin-invite/adminInvite.routes";
 import productRoutes from "./modules/product/product.routes";
 import cartRoutes from "./modules/cart/cart.routes";
+import addressRoutes from "./modules/address/address.routes";
 import orderRoutes from "./modules/order/order.routes";
 import checkOutRoutes from "./modules/checkout/payment.routes";
 import reviewRoutes from "./modules/review/review.routes";
 import wishListRoutes from "./modules/wishlist/wishlist.routes";
 import categoryRoutes from "./modules/category/category.routes";
 import subcategoryRoutes from "./modules/subcategory/subcategory.routes";
+
 
 const app = express();
 
@@ -54,6 +56,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/admin-invites", adminInviteRoute);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/addresses", addressRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/checkout", checkOutRoutes);
 app.use("/api/reviews", reviewRoutes);
