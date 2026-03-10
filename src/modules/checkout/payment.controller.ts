@@ -72,6 +72,7 @@ export const payWithMpesa = async (req: any, res: any) => {
         const timestamp = generateTimestamp();
         const password = Buffer.from(`${MPESA_SHORTCODE}${MPESA_PASSKEY}${timestamp}`).toString("base64");
         const token = await getMpesaToken();
+        console.log("MPESA TOKEN:", token);
 
         const stkResponse = await axios.post(
             `${MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest`,
@@ -102,10 +103,14 @@ export const payWithMpesa = async (req: any, res: any) => {
             transactionId: stkResponse.data.CheckoutRequestID
         });
 
-        res.json({ message: "STK Push initiated", response: stkResponse.data, paymentId: payment._id });
+        res.json({ message: "initiated, check your device for pin input", response: stkResponse.data, paymentId: payment._id });
     } catch (error: any) {
-        console.error("PAYMENT ERROR:", error);
-        res.status(500).json({ message: "Payment initiation failed", error: error.message || error });
+        console.error("FULL MPESA ERROR:", error?.response?.data || error);
+    
+        res.status(500).json({
+            message: "Payment initiation failed",
+            error: error?.response?.data || error.message
+        });
     }
 };
 
