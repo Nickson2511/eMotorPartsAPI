@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import authRoutes from "./modules/auth/auth.routes";
+import accountRoutes from "./modules/account/account.routes";
 import userRoutes from "./modules/user/user.routes";
 import adminInviteRoute from "./modules/admin-invite/adminInvite.routes";
 import productRoutes from "./modules/product/product.routes";
@@ -52,6 +53,7 @@ app.get("/health", (_req, res) => {
 
 // ---------- ROUTES ----------
 app.use("/api/auth", authRoutes);
+app.use("/api/account", accountRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin-invites", adminInviteRoute);
 app.use("/api/products", productRoutes);
